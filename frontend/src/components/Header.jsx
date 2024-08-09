@@ -10,9 +10,9 @@ const Header = () => {
     <Navbar className="border-b-2">
       <Link
         to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
+        className="self-center text-sm font-semibold whitespace-nowrap sm:text-xl dark:text-white"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
+        <span className="px-2 py-1 text-white rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
           Ali's
         </span>
         Blog
@@ -29,7 +29,7 @@ const Header = () => {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden sm:inline" color="grey" pill>
+        <Button className="hidden w-12 h-10 sm:inline" color="grey" pill>
           <FaMoon />
         </Button>
         <Link to="sign-in">
