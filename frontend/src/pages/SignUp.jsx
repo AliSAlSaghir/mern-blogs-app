@@ -15,8 +15,8 @@ const SignUp = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await signup(formData).unwrap();
-      toast.success(res.message);
+      await signup(formData).unwrap();
+      toast.success("Successfully registered");
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -79,7 +79,7 @@ const SignUp = () => {
               {isLoading ? (
                 <>
                   <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
+                  <span className="pl-3">Registering...</span>
                 </>
               ) : (
                 "Sign up"

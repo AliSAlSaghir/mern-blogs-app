@@ -11,7 +11,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    signin: builder.mutation({
+      query: formData => ({
+        url: `${AUTH_URL}/signin`,
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation } = authApiSlice;
+export const { useSignupMutation, useSigninMutation } = authApiSlice;
