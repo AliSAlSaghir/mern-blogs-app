@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSigninMutation } from "../redux/api/auth";
 import { toast } from "react-toastify";
+import { setCredentials } from "../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,11 +13,13 @@ const SignIn = () => {
   const handleChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+  const dispatch = useDispatch();
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await signin(formData).unwrap();
+      const res = await signin(formData).unwrap();
+      dispatch(setCredentials({ ...res }));
       toast.success("Successfully logged in");
       navigate("/");
     } catch (error) {
