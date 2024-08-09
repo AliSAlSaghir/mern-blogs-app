@@ -1,8 +1,29 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSignupMutation } from "../redux/api/auth";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({});
+  const [signup, { isLoading, error }] = useSignupMutation();
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      const res = await signup(formData).unwrap();
+      toast.success(res.message);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.message);
+    }
+  };
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex flex-col max-w-3xl gap-5 p-3 mx-auto md:flex-row md:items-center">
@@ -22,25 +43,47 @@ const SignUp = () => {
           </p>
         </div>
         <div className="flex-1">
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <Label value="Your username" />
-              <TextInput type="text" placeholder="Username" id="username" />
+              <TextInput
+                type="text"
+                placeholder="Username"
+                id="username"
+                onChange={handleChange}
+              />
             </div>
             <div>
               <Label value="Your email" />
               <TextInput
-                type="text"
+                type="email"
                 placeholder="name@company.com"
                 id="email"
+                onChange={handleChange}
               />
             </div>
             <div>
               <Label value="Your password" />
-              <TextInput type="text" placeholder="Password" id="password" />
+              <TextInput
+                type="password"
+                placeholder="Password"
+                id="password"
+                onChange={handleChange}
+              />
             </div>
-            <Button gradientDuoTone="purpleToPink" type="submit">
-              Sign up
+            <Button
+              gradientDuoTone="purpleToPink"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                "Sign up"
+              )}
             </Button>
           </form>
           <div className="flex gap-2 mt-5 text-sm">

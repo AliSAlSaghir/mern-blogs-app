@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import cors from "cors";
 
 dotenv.config();
 import connectDB from "./config/db.js";
@@ -10,6 +11,13 @@ connectDB();
 
 const app = express();
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend's origin
+    credentials: true,
+  })
+);
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
