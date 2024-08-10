@@ -44,3 +44,11 @@ export const updateUser = catchAsync(async (req, res, next) => {
     profilePicture: updatedUser.profilePicture,
   });
 });
+
+export const deleteUser = catchAsync(async (req, res, next) => {
+  if (req.user._id.toHexString() !== req.params.id)
+    return next(errorHandler(400, "You are not allowed to update this user!"));
+  const deletedUser = await User.findByIdAndDelete(req.params.id);
+  if (!deletedUser) return next(errorHandler(404, "User not found!"));
+  res.status(204).json({ message: "User deleted successfully!" });
+});
