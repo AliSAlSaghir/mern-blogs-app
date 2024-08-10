@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignupMutation } from "../redux/api/auth";
 import { toast } from "react-toastify";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ const SignUp = () => {
                 "Sign up"
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 mt-5 text-sm">
             <span>Have an account?</span>

@@ -5,6 +5,7 @@ import { useSigninMutation } from "../redux/api/auth";
 import { toast } from "react-toastify";
 import { setCredentials } from "../redux/features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ const SignIn = () => {
                 "Sign in"
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 mt-5 text-sm">
             <span>Don't have an account?</span>

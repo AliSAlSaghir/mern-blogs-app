@@ -19,7 +19,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    googleAuth: builder.mutation({
+      query: formData => ({
+        url: `${AUTH_URL}/google-auth`,
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useSigninMutation } = authApiSlice;
+export const { useSignupMutation, useSigninMutation, useGoogleAuthMutation } =
+  authApiSlice;

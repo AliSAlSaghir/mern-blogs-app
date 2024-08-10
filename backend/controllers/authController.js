@@ -14,7 +14,7 @@ export const signup = catchAsync(async (req, res, next) => {
   const newUser = new User({ username, email, password: hashedPassword });
 
   await newUser.save();
-  res.status(201).json({
+  res.status(200).json({
     _id: newUser._id,
     username: newUser.username,
     email: newUser.email,
@@ -24,11 +24,11 @@ export const signup = catchAsync(async (req, res, next) => {
 export const signin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return next(errorHandler(400, "Wrong email or password!"));
+    return next(errorHandler(400, "All fields all required!"));
   }
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
-    return next(errorHandler(404, "User not found!"));
+    return next(errorHandler(404, "Wrong email or password!"));
   }
   const validPassword = bcryptjs.compareSync(password, existingUser.password);
   if (!validPassword) {
@@ -37,9 +37,43 @@ export const signin = catchAsync(async (req, res, next) => {
 
   generateToken(res, existingUser._id);
 
-  res.status(201).json({
+  res.status(200).json({
     _id: existingUser._id,
     username: existingUser.username,
     email: existingUser.email,
   });
+});
+
+export const googleAuth = catchAsync(async (req, res, next) => {
+  const { username, email, googlePhotoUrl } = req.body;
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    generateToken(res, existingUser._id);
+    res.status(201).json({
+      _id: existingUser._id,
+      username: existingUser.username,
+      email: existingUser.email,
+    });
+  } else {
+    const generatedPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+    const newUser = new User({
+      username:
+        username.toLowerCase().split(" ").join("") +
+        Math.random().toString(9).slice(-4),
+      password: hashedPassword,
+      email,
+      profilePicture: googlePhotoUrl,
+    });
+
+    generateToken(res, newUser._id);
+    await newUser.save();
+
+    res.status(200).json({
+      _id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+    });
+  }
 });
