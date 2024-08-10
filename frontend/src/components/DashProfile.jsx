@@ -1,6 +1,6 @@
 import { Button, TextInput } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { app } from "../firebase";
 import {
   getDownloadURL,
@@ -11,6 +11,8 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { toast } from "react-toastify";
+import { useUpdateUserMutation } from "../redux/api/users";
+import { setCredentials } from "../redux/features/auth/authSlice";
 
 const DashProfile = () => {
   const { userInfo } = useSelector(state => state.auth);
@@ -18,8 +20,10 @@ const DashProfile = () => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(null);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
+  const [updateUser, { isLoading, error }] = useUpdateUserMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (imageFile) uploadImage();
@@ -38,6 +42,7 @@ const DashProfile = () => {
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
     uploadTask.on(
       "state_changed",
       snapshot => {
@@ -62,10 +67,27 @@ const DashProfile = () => {
     );
   };
 
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (Object.keys(formData).length === 0) return;
+    try {
+      const res = await updateUser({ user: formData, id: userInfo._id });
+      dispatch(setCredentials({ ...res.data }));
+      toast.success("User updated successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="w-full max-w-lg p-3 mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           accept="image/*"
@@ -113,16 +135,23 @@ const DashProfile = () => {
           id="username"
           placeholder="username"
           defaultValue={userInfo.username}
+          onChange={handleChange}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
           defaultValue={userInfo.email}
+          onChange={handleChange}
         />
-        <TextInput type="password" id="password" placeholder="password" />
+        <TextInput
+          type="password"
+          id="password"
+          placeholder="password"
+          onChange={handleChange}
+        />
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+          {isLoading ? "Updating..." : "Update"}
         </Button>
       </form>
       <div className="flex justify-between mt-5 text-red-500">
