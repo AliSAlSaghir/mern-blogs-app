@@ -20,7 +20,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const res = await signup(formData).unwrap();
-      dispatchEvent(setCredentials({ ...res.data }));
+      dispatch(setCredentials({ ...res }));
       toast.success("Successfully registered");
       navigate("/");
     } catch (error) {
