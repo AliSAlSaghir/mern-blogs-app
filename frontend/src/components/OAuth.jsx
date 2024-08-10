@@ -24,8 +24,7 @@ const OAuth = () => {
         email: resultsFromGoogle.user.email,
         googlePhotoUrl: resultsFromGoogle.user.photoURL,
       });
-      console.log(res);
-      dispatch(setCredentials({ ...res }));
+      dispatch(setCredentials({ ...res.data }));
       navigate("/");
     } catch (error) {
       console.log(error);

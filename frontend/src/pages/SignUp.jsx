@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSignupMutation } from "../redux/api/auth";
 import { toast } from "react-toastify";
 import OAuth from "../components/OAuth";
+import { setCredentials } from "../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [signup, { isLoading, error }] = useSignupMutation();
   const handleChange = e => {
@@ -16,7 +19,8 @@ const SignUp = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await signup(formData).unwrap();
+      const res = await signup(formData).unwrap();
+      dispatchEvent(setCredentials({ ...res.data }));
       toast.success("Successfully registered");
       navigate("/");
     } catch (error) {

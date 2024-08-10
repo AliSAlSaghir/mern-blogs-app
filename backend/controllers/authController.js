@@ -18,6 +18,7 @@ export const signup = catchAsync(async (req, res, next) => {
     _id: newUser._id,
     username: newUser.username,
     email: newUser.email,
+    profilePicture: newUser.profilePicture,
   });
 });
 
@@ -41,6 +42,7 @@ export const signin = catchAsync(async (req, res, next) => {
     _id: existingUser._id,
     username: existingUser.username,
     email: existingUser.email,
+    profilePicture: existingUser.profilePicture,
   });
 });
 
@@ -54,6 +56,7 @@ export const googleAuth = catchAsync(async (req, res, next) => {
       _id: existingUser._id,
       username: existingUser.username,
       email: existingUser.email,
+      profilePicture: existingUser.profilePicture,
     });
   } else {
     const generatedPassword = Math.random().toString(36).slice(-8);
@@ -74,6 +77,7 @@ export const googleAuth = catchAsync(async (req, res, next) => {
       _id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      profilePicture: newUser.profilePicture,
     });
   }
 });
