@@ -20,7 +20,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       const res = await signin(formData).unwrap();
-      dispatch(setCredentials({ ...res.data }));
+      dispatch(setCredentials({ ...res }));
       toast.success("Successfully logged in");
       navigate("/");
     } catch (error) {
