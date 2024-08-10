@@ -3,7 +3,11 @@ import errorHandler from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 import User from "../models/userModel.js";
 export const updateUser = catchAsync(async (req, res, next) => {
+<<<<<<< HEAD
   if (req.user._id.toHexString() !== req.params.id)
+=======
+  if (req.user.userId !== req.params.id)
+>>>>>>> fdd69efb062415b0f3180eab78b3113e7a32c152
     return next(errorHandler(400, "You are not allowed to update this user!"));
   if (req.body.password) {
     if (req.body.password.length < 6)
