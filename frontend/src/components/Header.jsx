@@ -1,16 +1,34 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/features/theme/themeSlice";
+import { useSignoutMutation } from "../redux/api/auth";
+import { logout } from "../redux/features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const path = useLocation().pathname;
   const { userInfo } = useSelector(state => state.auth);
   const { theme } = useSelector(state => state.theme);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [signout] = useSignoutMutation();
+
+  const handleSignOut = async () => {
+    try {
+      await signout();
+      dispatch(logout());
+      toast.success("Signed out successfully");
+      navigate("/sign-in");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <Navbar className="border-b-2">
       <Link
@@ -58,7 +76,7 @@ const Header = () => {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/sign-in">

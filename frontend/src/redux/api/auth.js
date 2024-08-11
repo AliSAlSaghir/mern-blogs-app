@@ -27,8 +27,19 @@ export const authApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    signout: builder.mutation({
+      query: () => ({
+        url: `${AUTH_URL}/sign-out`,
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useSigninMutation, useGoogleAuthMutation } =
-  authApiSlice;
+export const {
+  useSignupMutation,
+  useSigninMutation,
+  useGoogleAuthMutation,
+  useSignoutMutation,
+} = authApiSlice;

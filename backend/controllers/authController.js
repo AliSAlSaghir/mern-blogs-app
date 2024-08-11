@@ -81,3 +81,14 @@ export const googleAuth = catchAsync(async (req, res, next) => {
     });
   }
 });
+
+export const signout = catchAsync((req, res, next) => {
+  res.cookie("jwt", " ", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({
+    message: "Signed out successfully",
+  });
+});

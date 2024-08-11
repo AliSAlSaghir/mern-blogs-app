@@ -18,6 +18,7 @@ import {
   useUpdateUserMutation,
 } from "../redux/api/users";
 import { setCredentials, logout } from "../redux/features/auth/authSlice";
+import { useSignoutMutation } from "../redux/api/auth";
 
 const DashProfile = () => {
   const { userInfo } = useSelector(state => state.auth);
@@ -27,11 +28,14 @@ const DashProfile = () => {
   const [imageFileUploading, setImageFileUploading] = useState(null);
   const [formData, setFormData] = useState({});
   const [showModal, setShowModal] = useState(false);
+
   const filePickerRef = useRef();
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const [deleteUser] = useDeleteUserMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const [deleteUser] = useDeleteUserMutation();
+  const [signout] = useSignoutMutation();
 
   useEffect(() => {
     if (imageFile) uploadImage();
@@ -98,6 +102,18 @@ const DashProfile = () => {
       await deleteUser(userInfo._id);
       dispatch(logout());
       toast.success("User deleted successfully");
+      navigate("/sign-in");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signout();
+      dispatch(logout());
+      toast.success("Signed out successfully");
       navigate("/sign-in");
     } catch (error) {
       console.log(error);
@@ -179,7 +195,9 @@ const DashProfile = () => {
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span className="cursor-pointer" onClick={handleSignOut}>
+          Sign Out
+        </span>
       </div>
       <Modal
         show={showModal}
