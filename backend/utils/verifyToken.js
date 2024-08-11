@@ -3,7 +3,7 @@ import errorHandler from "./error.js";
 
 import User from "../models/userModel.js";
 
-export const verifyToken = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
     try {
@@ -17,3 +17,5 @@ export const verifyToken = async (req, res, next) => {
     return next(errorHandler(401, "Not authorized, no token."));
   }
 };
+
+export default verifyToken;

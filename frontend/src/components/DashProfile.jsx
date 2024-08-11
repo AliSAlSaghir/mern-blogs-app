@@ -1,7 +1,7 @@
 import { Button, Modal, TextInput } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { app } from "../firebase";
 import {
@@ -187,9 +187,25 @@ const DashProfile = () => {
           placeholder="password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          disabled={isLoading || imageFileUploading}
+        >
           {isLoading ? "Updating..." : "Update"}
         </Button>
+        {userInfo.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="flex justify-between mt-5 text-red-500">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>

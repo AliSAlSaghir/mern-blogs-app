@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -23,6 +24,7 @@ app.use(
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/posts", postRoutes);
 
 const port = process.env.PORT || 5001;
 app.listen(port, (req, res) => console.log("Server running on port 5001"));
