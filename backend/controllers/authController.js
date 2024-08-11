@@ -19,6 +19,7 @@ export const signup = catchAsync(async (req, res, next) => {
     username: newUser.username,
     email: newUser.email,
     profilePicture: newUser.profilePicture,
+    isAdmin: newUser.isAdmin,
   });
 });
 
@@ -43,6 +44,7 @@ export const signin = catchAsync(async (req, res, next) => {
     username: existingUser.username,
     email: existingUser.email,
     profilePicture: existingUser.profilePicture,
+    isAdmin: existingUser.isAdmin,
   });
 });
 
@@ -57,6 +59,7 @@ export const googleAuth = catchAsync(async (req, res, next) => {
       username: existingUser.username,
       email: existingUser.email,
       profilePicture: existingUser.profilePicture,
+      isAdmin: existingUser.isAdmin,
     });
   } else {
     const generatedPassword = Math.random().toString(36).slice(-8);
@@ -78,6 +81,7 @@ export const googleAuth = catchAsync(async (req, res, next) => {
       username: newUser.username,
       email: newUser.email,
       profilePicture: newUser.profilePicture,
+      isAdmin: newUser.isAdmin,
     });
   }
 });

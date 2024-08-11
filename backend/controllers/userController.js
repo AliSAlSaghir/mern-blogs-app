@@ -42,6 +42,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
     username: updatedUser.username,
     email: updatedUser.email,
     profilePicture: updatedUser.profilePicture,
+    isAdmin: updatedUser.isAdmin,
   });
 });
 
