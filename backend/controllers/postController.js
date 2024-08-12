@@ -63,8 +63,33 @@ export const getPosts = catchAsync(async (req, res, next) => {
 
 export const deletePost = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const DeletedPost = await Post.findByIdAndDelete(id);
-  if (!DeletedPost)
-    return next(errorHandler(400, "No Post founded with this id!"));
+  const deletedPost = await Post.findByIdAndDelete(id);
+  if (!deletedPost)
+    return next(errorHandler(400, "No post founded with this id!"));
   res.status(200).json({ message: "Post deleted successfully" });
+});
+
+export const updatePost = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const slug = req.body.title
+    .split(" ")
+    .join("-")
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g, "");
+  const updatedPost = await Post.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        title: req.body.title,
+        content: req.body.content,
+        category: req.body.category,
+        image: req.body.image,
+        slug,
+      },
+    },
+    { new: true }
+  );
+  if (!updatedPost)
+    return next(errorHandler(400, "No post founded with this id!"));
+  res.status(200).json(updatedPost);
 });

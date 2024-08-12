@@ -24,6 +24,14 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    updatePost: builder.mutation({
+      query: ({ id, post }) => ({
+        url: `${POSTS_URL}/${id}`,
+        method: "PUT",
+        body: post,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -32,4 +40,5 @@ export const {
   useGetPostsQuery,
   useLazyGetPostsQuery,
   useDeletePostMutation,
+  useUpdatePostMutation,
 } = postsApiSlice;
