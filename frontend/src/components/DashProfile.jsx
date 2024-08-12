@@ -13,10 +13,7 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { toast } from "react-toastify";
-import {
-  useDeleteUserMutation,
-  useUpdateUserMutation,
-} from "../redux/api/users";
+import { useDeleteMeMutation, useUpdateUserMutation } from "../redux/api/users";
 import { setCredentials, logout } from "../redux/features/auth/authSlice";
 import { useSignoutMutation } from "../redux/api/auth";
 
@@ -34,7 +31,7 @@ const DashProfile = () => {
   const navigate = useNavigate();
 
   const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteMe] = useDeleteMeMutation();
   const [signout] = useSignoutMutation();
 
   useEffect(() => {
@@ -99,7 +96,7 @@ const DashProfile = () => {
   const handleDeleteUser = async () => {
     setShowModal(false);
     try {
-      await deleteUser(userInfo._id);
+      await deleteMe();
       dispatch(logout());
       toast.success("User deleted successfully");
       navigate("/sign-in");

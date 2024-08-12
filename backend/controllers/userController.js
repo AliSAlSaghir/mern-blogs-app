@@ -46,10 +46,43 @@ export const updateUser = catchAsync(async (req, res, next) => {
   });
 });
 
+export const deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.user._id);
+  res.status(204).json({ message: "User deleted successfully!" });
+});
+
 export const deleteUser = catchAsync(async (req, res, next) => {
-  if (req.user._id.toHexString() !== req.params.id)
-    return next(errorHandler(400, "You are not allowed to update this user!"));
   const deletedUser = await User.findByIdAndDelete(req.params.id);
   if (!deletedUser) return next(errorHandler(404, "User not found!"));
   res.status(204).json({ message: "User deleted successfully!" });
+});
+
+export const getUsers = catchAsync(async (req, res, next) => {
+  const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 9;
+  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const users = await User.find()
+    .sort({ updatedAt: sortDirection })
+    .skip(startIndex)
+    .limit(limit);
+
+  const totalUsers = await User.countDocuments();
+
+  const now = new Date();
+
+  const oneMonthAgo = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    now.getDate()
+  );
+
+  const lastMonthUsers = await User.countDocuments({
+    createdAt: { $gte: oneMonthAgo },
+  });
+
+  res.status(200).json({
+    users,
+    totalUsers,
+    lastMonthUsers,
+  });
 });

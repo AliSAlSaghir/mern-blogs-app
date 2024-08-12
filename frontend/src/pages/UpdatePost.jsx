@@ -86,7 +86,7 @@ export default function UpdatePost() {
       toast.success("Post updated successfully");
       navigate(`/post/${res.data.slug}`);
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong!");
     }
   };
   return (
