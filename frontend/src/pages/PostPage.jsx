@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
+import PostCard from "../components/PostCard";
 import { useLazyGetPostsQuery } from "../redux/api/posts";
 import { toast } from "react-toastify";
 
 export default function PostPage() {
   const { postSlug } = useParams();
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState(null);
 
   const [triggerGetPosts, { isLoading }] = useLazyGetPostsQuery();
 
@@ -24,6 +26,19 @@ export default function PostPage() {
     };
     fetchPost();
   }, [postSlug, triggerGetPosts]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentPosts = async () => {
+        const res = await triggerGetPosts("?limit=3");
+
+        setRecentPosts(res.data.posts);
+      };
+      fetchRecentPosts();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }, [triggerGetPosts]);
 
   if (isLoading)
     return (
@@ -63,6 +78,14 @@ export default function PostPage() {
         <CallToAction />
       </div>
       <CommentSection postId={post?._id} />
+
+      <div className="flex flex-col items-center justify-center mb-5">
+        <h1 className="mt-5 text-xl">Recent articles</h1>
+        <div className="flex flex-wrap justify-center gap-5 mt-5">
+          {recentPosts &&
+            recentPosts.map(post => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
     </main>
   );
 }

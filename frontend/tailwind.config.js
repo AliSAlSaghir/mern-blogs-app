@@ -5,7 +5,11 @@ import scrollbarPlugin from "tailwind-scrollbar";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        "md-lg": "880px",
+      },
+    },
   },
   plugins: [flowbite.plugin(), scrollbarPlugin()],
 };
