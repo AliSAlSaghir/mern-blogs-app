@@ -2,6 +2,7 @@ import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
+import CommentSection from "../components/CommentSection";
 import { useLazyGetPostsQuery } from "../redux/api/posts";
 import { toast } from "react-toastify";
 
@@ -15,6 +16,7 @@ export default function PostPage() {
     const fetchPost = async () => {
       try {
         const res = await triggerGetPosts(`?slug=${postSlug}`);
+
         setPost(res.data.posts[0]);
       } catch (error) {
         toast.error(error.message);
@@ -60,6 +62,7 @@ export default function PostPage() {
       <div className="w-full max-w-4xl mx-auto">
         <CallToAction />
       </div>
+      <CommentSection postId={post?._id} />
     </main>
   );
 }

@@ -14,10 +14,12 @@ import AdminRoute from "./components/AdminRoute";
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
+import ScrollToTop from "./components/ScrollToTop";
 export default function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route index element={<Home />} />

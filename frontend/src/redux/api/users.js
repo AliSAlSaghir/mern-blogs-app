@@ -30,6 +30,12 @@ const usersApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    getUser: builder.query({
+      query: id => ({
+        url: `${USERS_URL}/${id}`,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -38,4 +44,5 @@ export const {
   useDeleteMeMutation,
   useDeleteUserMutation,
   useLazyGetUsersQuery,
+  useLazyGetUserQuery,
 } = usersApiSlice;

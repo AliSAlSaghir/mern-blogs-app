@@ -4,6 +4,7 @@ import {
   deleteUser,
   getUsers,
   deleteMe,
+  getUser,
 } from "../controllers/userController.js";
 import verifyToken from "../utils/verifyToken.js";
 import authorizeAdmin from "../utils/authorizeAdmin.js";
@@ -16,6 +17,10 @@ router.route("/").get(authorizeAdmin, getUsers);
 
 router.route("/deleteMe").delete(deleteMe);
 
-router.route("/:id").put(updateUser).delete(authorizeAdmin, deleteUser);
+router
+  .route("/:id")
+  .put(updateUser)
+  .delete(authorizeAdmin, deleteUser)
+  .get(getUser);
 
 export default router;
