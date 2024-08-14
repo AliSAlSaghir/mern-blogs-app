@@ -64,7 +64,6 @@ export default function CreatePost() {
     e.preventDefault();
     try {
       const res = await createPost(formData);
-      console.log(res);
 
       toast.success("Post created successfully");
       navigate(`/post/${res.data.slug}`);

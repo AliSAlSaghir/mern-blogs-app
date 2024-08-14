@@ -1,5 +1,5 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -11,11 +11,19 @@ import { toast } from "react-toastify";
 
 const Header = () => {
   const path = useLocation().pathname;
+  const location = useLocation();
   const { userInfo } = useSelector(state => state.auth);
   const { theme } = useSelector(state => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [signout] = useSignoutMutation();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) setSearchTerm(searchTermFromUrl);
+  }, [location.search]);
 
   const handleSignOut = async () => {
     try {
@@ -29,6 +37,14 @@ const Header = () => {
     }
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
   return (
     <Navbar className="border-b-2">
       <Link
@@ -40,12 +56,14 @@ const Header = () => {
         </span>
         Blog
       </Link>
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
           placeholder="search"
           rightIcon={AiOutlineSearch}
           className="hidden lg:inline"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
         ></TextInput>
       </form>
       <Button className="w-12 h-10 lg:hidden" color="grey" pill>
