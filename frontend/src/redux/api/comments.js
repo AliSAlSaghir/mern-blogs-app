@@ -54,5 +54,6 @@ export const {
   useLikeCommentMutation,
   useEditCommentMutation,
   useDeleteCommentMutation,
+  useGetCommentsQuery,
   useLazyGetCommentsQuery,
 } = commentsApiSlice;
