@@ -5,11 +5,14 @@ import {
   likeComment,
   editComment,
   deleteComment,
+  getComments,
 } from "../controllers/commentController.js";
 import verifyToken from "../utils/verifyToken.js";
+import authorizeAdmin from "../utils/authorizeAdmin.js";
 
 const router = express.Router();
 
+router.route("/").get(verifyToken, authorizeAdmin, getComments);
 router
   .route("/:postId")
   .get(getCommentsForPost)

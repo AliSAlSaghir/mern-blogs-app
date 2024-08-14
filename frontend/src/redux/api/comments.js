@@ -39,6 +39,12 @@ export const commentsApiSlice = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    getComments: builder.query({
+      query: (query = "") => ({
+        url: `${COMMENTS_URL}${query}`,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -48,4 +54,5 @@ export const {
   useLikeCommentMutation,
   useEditCommentMutation,
   useDeleteCommentMutation,
+  useLazyGetCommentsQuery,
 } = commentsApiSlice;
