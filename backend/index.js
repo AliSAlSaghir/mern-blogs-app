@@ -6,11 +6,14 @@ import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 dotenv.config();
 import connectDB from "./config/db.js";
 
 connectDB();
+
+const __dirname = path.resolve();
 
 const app = express();
 app.use(express.json());
@@ -27,6 +30,12 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/comments", commentRoutes);
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
 
 const port = process.env.PORT || 5001;
 app.listen(port, (req, res) => console.log("Server running on port 5001"));
