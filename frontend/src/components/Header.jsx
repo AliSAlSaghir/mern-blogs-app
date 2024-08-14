@@ -66,7 +66,12 @@ const Header = () => {
           onChange={e => setSearchTerm(e.target.value)}
         ></TextInput>
       </form>
-      <Button className="w-12 h-10 lg:hidden" color="grey" pill>
+      <Button
+        className="w-12 h-10 lg:hidden"
+        color="grey"
+        pill
+        onClick={handleSubmit}
+      >
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
