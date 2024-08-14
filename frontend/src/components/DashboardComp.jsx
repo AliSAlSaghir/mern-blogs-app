@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import {
   HiAnnotation,
   HiArrowNarrowUp,
@@ -13,59 +11,13 @@ import { useGetCommentsQuery } from "../redux/api/comments";
 import { useGetUsersQuery } from "../redux/api/users";
 
 export default function DashboardComp() {
-  const [users, setUsers] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalPosts, setTotalPosts] = useState(0);
-  const [totalComments, setTotalComments] = useState(0);
-  const [lastMonthUsers, setLastMonthUsers] = useState(0);
-  const [lastMonthPosts, setLastMonthPosts] = useState(0);
-  const [lastMonthComments, setLastMonthComments] = useState(0);
-  const { userInfo } = useSelector(state => state.auth);
+  const { data: { users, totalUsers, lastMonthUsers } = {} } =
+    useGetUsersQuery("?limit=5");
+  const { data: { posts, totalPosts, lastMonthPosts } = {} } =
+    useGetPostsQuery("?limit=5");
+  const { data: { comments, totalComments, lastMonthComments } = {} } =
+    useGetCommentsQuery("?limit=5");
 
-  const { refetch: refetchUsers } = useGetUsersQuery("?limit=5");
-  const { refetch: refetchPosts } = useGetPostsQuery("?limit=5");
-  const { refetch: refetchComments } = useGetCommentsQuery("?limit=5");
-
-  useEffect(() => {
-    const fetchUsersData = async () => {
-      try {
-        const res = await refetchUsers();
-        setUsers(res.data.users);
-        setTotalUsers(res.data.totalUsers);
-        setLastMonthUsers(res.data.lastMonthUsers);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    const fetchPostsData = async () => {
-      try {
-        const res = await refetchPosts();
-        setPosts(res.data.posts);
-        setTotalPosts(res.data.totalPosts);
-        setLastMonthPosts(res.data.lastMonthPosts);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    const fetchCommentsData = async () => {
-      try {
-        const res = await refetchComments();
-        setComments(res.data.comments);
-        setTotalComments(res.data.totalComments);
-        setLastMonthComments(res.data.lastMonthComments);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    if (userInfo.isAdmin) {
-      fetchUsersData();
-      fetchPostsData();
-      fetchCommentsData();
-    }
-  }, [userInfo, refetchUsers, refetchPosts, refetchComments]);
   return (
     <div className="p-3 md:mx-auto">
       <div className="flex flex-wrap justify-center gap-4">
